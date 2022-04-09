@@ -28,6 +28,9 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: RkVAz75SRzkpfpA8
       WORDPRESS_DB_NAME: wordpressdb
+  #   Extra config
+  #   WORDPRESS_CONFIG_EXTRA: |
+  #     define('UPLOADS', 'media');
 
   wp-cli:
     depends_on:
