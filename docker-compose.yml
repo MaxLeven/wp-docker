@@ -1,16 +1,15 @@
 version: '3.9'
 
 services:
-
   db:
     image: mysql:5.7
     volumes:
       - ./db:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_DATABASE: wordpressdb
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: RkVAz75SRzkpfpA8
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
 
   wordpress:
@@ -21,16 +20,18 @@ services:
       - ./wordpress:/var/www/html
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
     ports:
-      - 80:80
+      - "${PORT}:80"
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: RkVAz75SRzkpfpA8
-      WORDPRESS_DB_NAME: wordpressdb
-  #   Extra config
-  #   WORDPRESS_CONFIG_EXTRA: |
-  #     define('UPLOADS', 'media');
+      WORDPRESS_DB_HOST: "${DB_HOST}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+      WORDPRESS_TABLE_PREFIX: "${TABLE_PREFIX}"
+      WORDPRESS_DEBUG: "${DEBUG}"
+      #   Extra config
+      # WORDPRESS_CONFIG_EXTRA: |
+      #   define('UPLOADS', ${UPLOADS});
 
   wp-cli:
     depends_on:
@@ -39,6 +40,12 @@ services:
     image: wordpress:cli
     volumes:
       - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: "${DB_HOST}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+      WORDPRESS_TABLE_PREFIX: "${TABLE_PREFIX}"
 
 volumes:
   wordpress: {}
